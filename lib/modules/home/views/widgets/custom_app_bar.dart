@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:store_app/modules/auth/controllers/auth_controller.dart';
+import 'package:store_app/routes/app_routes.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends GetView<AuthController> {
   const CustomAppBar({super.key});
 
   @override
@@ -18,27 +21,49 @@ class CustomAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(AppRoutes.cart);
+                },
                 icon: const Icon(Icons.card_travel_outlined),
               ),
-              IconButton(onPressed: () {}, icon: const CircleAvatar()),
+              IconButton(
+                onPressed: () {
+                  Get.toNamed(AppRoutes.account);
+                },
+                icon: Obx(
+                  () => CircleAvatar(
+                    child: Text(
+                      "${controller.user.value?.name[0].toUpperCase()}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(
-            top: 10,
-            left: 20,
-            right: 20,
-            bottom: 20,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(AppRoutes.search);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(
+              top: 10,
+              left: 20,
+              right: 20,
+              bottom: 20,
+            ),
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: const Text("Search"),
           ),
-          width: double.infinity,
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: const Text("Search"),
         ),
       ],
     );

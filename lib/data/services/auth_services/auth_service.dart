@@ -1,8 +1,10 @@
 import 'package:store_app/data/models/user_model.dart';
+import 'package:store_app/data/services/auth_services/i_auth_api_service.dart';
 
-class ApiService {
+class AuthService implements IAuthApiService {
   // create
-  static Future<dynamic> signInWithGoogle() async {
+  @override
+  Future<dynamic> signInWithGoogle() async {
     // logic
     await Future.delayed(const Duration(seconds: 3));
     return UserModel(
@@ -13,7 +15,8 @@ class ApiService {
   }
 
   // signOut
-  static Future<dynamic> signOut() async {
+  @override
+  Future<dynamic> signOut() async {
     // logic
     return UserModel(
       id: "65844",
@@ -23,7 +26,8 @@ class ApiService {
   }
 
   // check is authanticated
-  static Future<dynamic> isAuthanticated() async {
+  @override
+  Future<dynamic> isAuthenticated() async {
     // logic
     return null;
     return UserModel(
@@ -34,7 +38,8 @@ class ApiService {
   }
 
   // update
-  static Future<dynamic> updateUser() async {
+  @override
+  Future<dynamic> updateUser(dynamic userData) async {
     // logic
     return UserModel(
       id: "65844",
@@ -44,7 +49,8 @@ class ApiService {
   }
 
   // delete
-  static Future<dynamic> deleteUser() async {
+  @override
+  Future<dynamic> deleteUser() async {
     // logic
     return UserModel(
       id: "65844",

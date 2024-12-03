@@ -27,7 +27,7 @@ class HomeContent extends StatelessWidget {
               );
             }).toList(),
           ),
-          ProductList(),
+          const ProductList(),
         ],
       ),
     );
