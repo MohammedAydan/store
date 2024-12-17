@@ -67,7 +67,11 @@ class ProductService implements IProductService {
   }
 
   @override
-  Future<List<dynamic>> searchProducts(String search) async {
+  Future<List<dynamic>> searchProducts(
+    String search, {
+    int page = 1,
+    int limit = 10,
+  }) async {
     await Future.delayed(const Duration(seconds: 1));
     return testProducts
         .where((p) =>

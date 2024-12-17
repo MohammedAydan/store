@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/modules/home/controllers/products_controller.dart';
+import 'package:store_app/modules/home/views/widgets/list_of_loading_card.dart';
 import 'package:store_app/modules/home/views/widgets/product_card.dart';
 
 class ProductList extends GetView<ProductsController> {
@@ -29,42 +30,46 @@ class ProductList extends GetView<ProductsController> {
         //   ),
         // ),
         const SizedBox(height: 30),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (controller.isLoading.isFalse &&
-              controller.error.value.isNotEmpty) {
-            return GestureDetector(
-              onTap: controller.getProducts,
-              child: Center(
-                child: Text(controller.error.value),
-              ),
-            );
-          }
-
-          if (controller.isLoading.isFalse && controller.products.isEmpty) {
-            return const Center(
-              child: Text('No products found'),
-            );
-          }
-
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.7,
-            ),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.products.length,
-            itemBuilder: (context, index) {
-              return ProductCard(product: controller.products[index]);
-            },
-          );
-        }),
+        Obx(
+          () => Column(
+            children: [
+              if (controller.isLoading.isFalse &&
+                  controller.error.value.isNotEmpty) ...[
+                GestureDetector(
+                  onTap: controller.getProducts,
+                  child: Center(
+                    child: Text(controller.error.value),
+                  ),
+                ),
+              ],
+              if (controller.isLoading.isFalse &&
+                  controller.products.isEmpty) ...[
+                const Center(
+                  child: Text('No products found'),
+                ),
+              ],
+              if (controller.products.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                GridView.builder(
+                  controller: controller.scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 9 / 15,
+                  ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.products.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(product: controller.products[index]);
+                  },
+                ),
+              ],
+              if (controller.isLoading.value) ...[
+                const ListOfLoadingCard(),
+              ],
+            ],
+          ),
+        ),
       ],
     );
   }

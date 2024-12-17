@@ -69,32 +69,36 @@ class SearchPage extends GetView<SearchProductsController> {
               ],
             ),
             const SizedBox(height: 20),
-            Obx(() {
-              if (controller.search.value.isEmpty) {
-                return const Text('Search for products');
-              }
-
-              if (controller.isLoading.isFalse && controller.error.isNotEmpty) {
-                return Text(controller.error.value);
-              }
-
-              if (controller.isLoading.isFalse && controller.products.isEmpty) {
-                return const Text('No products found');
-              }
-
-              if (controller.products.isNotEmpty) {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.products.length,
-                    itemBuilder: (context, index) {
-                      final product = controller.products[index];
-                      return ProductCard(product: product);
-                    },
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
+            Obx(
+              () => Expanded(
+                child: Column(
+                  children: [
+                    if (controller.search.value.isEmpty) ...[
+                      const Text('Search for products'),
+                    ],
+                    if (controller.isLoading.isFalse &&
+                        controller.error.isNotEmpty) ...[
+                      Text(controller.error.value),
+                    ],
+                    if (controller.isLoading.isFalse &&
+                        controller.products.isEmpty) ...[
+                      const Text('No products found'),
+                    ],
+                    if (controller.products.isNotEmpty) ...[
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.products.length,
+                          itemBuilder: (context, index) {
+                            final product = controller.products[index];
+                            return ProductCard(product: product);
+                          },
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/data/models/product_model.dart';
 import 'package:store_app/data/repositories/product_repository.dart';
@@ -10,19 +11,39 @@ class ProductsController extends GetxController {
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString error = "".obs;
+  final RxInt page = 1.obs;
+  final RxInt limit = 10.obs;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
     getProducts();
+    scrollController.addListener(() {
+      if(isLoading.isTrue) return;
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        page.value++;
+        getProducts();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
   }
 
   void getProducts() async {
     try {
       error.value = "";
       isLoading.value = true;
-      final res = await _productRepository.getProducts();
-      products.assignAll(res);
+      final res = await _productRepository.getProducts(
+        page: page.value,
+        limit: limit.value,
+      );
+      products.addAll(res);
     } catch (e) {
       error.value = e.toString();
     } finally {

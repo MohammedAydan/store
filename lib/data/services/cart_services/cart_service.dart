@@ -21,7 +21,7 @@ class CartService implements ICartService {
   }
 
   @override
-  Future<List<ProductModel>> getCart() async {
+  Future<List<ProductModel>> getCart(String userId,{int page = 1,int limit = 10}) async {
     await Future.delayed(const Duration(seconds: 2));
     // Get cart
     return [];

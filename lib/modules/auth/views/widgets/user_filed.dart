@@ -16,7 +16,7 @@ class UserFiled extends StatelessWidget {
       width: double.infinity,
       child: Card.filled(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           child: Text(
             '$name: $data',
             style: const TextStyle(fontSize: 18),

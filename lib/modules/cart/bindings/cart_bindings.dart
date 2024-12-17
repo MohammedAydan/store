@@ -7,6 +7,6 @@ import 'package:store_app/modules/cart/controllers/cart_controller.dart';
 class CartBindings extends Bindings {
   @override
   void dependencies() {
-
+    // Get.put<CartController>(CartController(di(),Get.find()));
   }
 }

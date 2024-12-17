@@ -13,6 +13,10 @@ class ProductShowPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Get.theme.scaffoldBackgroundColor,
+        elevation: 0,
+        shadowColor: Colors.grey.withOpacity(0.5),
+        surfaceTintColor: Get.theme.scaffoldBackgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.card_travel_rounded),

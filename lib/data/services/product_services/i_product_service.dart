@@ -4,7 +4,11 @@ abstract class IProductService {
   Future<dynamic> addProduct(dynamic product);
   Future<dynamic> updateProduct(dynamic product);
   Future<void> deleteProduct(String id);
-  Future<List<dynamic>> searchProducts(String sreach);
+  Future<List<dynamic>> searchProducts(
+    String sreach, {
+    int page = 1,
+    int limit = 10,
+  });
   // add review to product
   Future<dynamic> addReview(
     String userId,

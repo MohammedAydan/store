@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/data/models/product_model.dart';
 import 'package:store_app/data/repositories/cart_repository.dart';
+import 'package:store_app/modules/auth/controllers/auth_controller.dart';
 
 class CartController extends GetxController {
   final CartRepository _cartRepository;
+  final AuthController _authController;
 
-  CartController(this._cartRepository);
+  CartController(this._cartRepository, this._authController);
 
   // Reactive states
   final cartItems = <ProductModel>[].obs;
@@ -13,18 +16,34 @@ class CartController extends GetxController {
   final isProductLoading = <String>{}.obs; // Use a Set for efficiency
   final error = ''.obs;
   final totalPrice = 0.0.obs;
+  final page = 1.obs;
+  final limit = 10.obs;
+  final scrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
     getCart();
+    scrollController.addListener(() {
+      if (isLoading.isTrue) return;
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        page.value++;
+        getCart();
+      }
+    });
   }
 
   Future<void> getCart() async {
     try {
+      if (_authController.user.value?.id == null) return;
       isLoading.value = true;
       error.value = '';
-      final cart = await _cartRepository.getCart();
+      final cart = await _cartRepository.getCart(
+        _authController.user.value!.id!,
+        page: page.value,
+        limit: limit.value,
+      );
       cartItems.assignAll(cart);
       calcTotal();
     } catch (e) {

@@ -18,8 +18,16 @@ class CartRepository {
     await _cartService.clearCart();
   }
 
-  Future<List<ProductModel>> getCart() async {
-    return await _cartService.getCart();
+  Future<List<ProductModel>> getCart(
+    String userId, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    return await _cartService.getCart(
+      userId,
+      page: page,
+      limit: limit,
+    );
   }
 
   Future<dynamic> checkout() async {

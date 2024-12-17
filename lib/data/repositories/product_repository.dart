@@ -31,8 +31,16 @@ class ProductRepository {
     await _productService.deleteProduct(id);
   }
 
-  Future<List<ProductModel>> searchProducts(String search) async {
-    final res = await _productService.searchProducts(search);
+  Future<List<ProductModel>> searchProducts(
+    String search, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    final res = await _productService.searchProducts(
+      search,
+      page: page,
+      limit: limit,
+    );
     print(res);
     return res.map((e) => ProductModel.fromJsonForFakestoreapiDATA(e)).toList();
   }

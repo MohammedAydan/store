@@ -7,25 +7,18 @@ import 'package:store_app/routes/app_routes.dart';
 class AuthController extends GetxController {
   final AuthRepository _authRepository;
 
-  // Current user
   final Rx<UserModel?> user = Rx<UserModel?>(null);
-
-  // Loading state
   final RxBool isLoading = false.obs;
-
-  // Error message
   final RxString error = "".obs;
 
   AuthController(this._authRepository);
 
-  /// Sign in with Google
   Future<void> signInWithGoogle() async {
     try {
-      _showLoadingDialog(); // Show loading dialog
+      _showLoadingDialog();
       error.value = "";
       isLoading.value = true;
 
-      // Perform Google Sign-In
       final result = await _authRepository.signInWithGoogle();
       result.fold(
         (_) {
@@ -35,7 +28,7 @@ class AuthController extends GetxController {
         (userData) {
           user.value = userData;
           _dismissLoadingDialog();
-          Get.offAllNamed(AppRoutes.home); // Navigate to home
+          Get.offAllNamed(AppRoutes.home);
         },
       );
     } catch (e) {
@@ -45,18 +38,14 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Sign out the user
   Future<void> signOut() async {
     try {
-      isLoading.value = true;
-
-      // Perform sign out
+      // isLoading.value = true;
+      _showLoadingDialog();
+      error.value = "";
       await _authRepository.signOut();
-
-      // Clear user state
       user.value = null;
-
-      // Navigate to auth page
+      _dismissLoadingDialog();
       Get.offAllNamed(AppRoutes.auth);
     } catch (e) {
       error.value = "Failed to sign out: $e";
@@ -65,21 +54,19 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Check if the user is authenticated
   Future<void> checkAuthentication() async {
     try {
       error.value = "";
       isLoading.value = true;
 
-      // Check authentication status
       final result = await _authRepository.isAuthenticated();
       result.fold(
-        (failure) {
-          Get.offAllNamed(AppRoutes.auth); // Navigate to auth page
+        (_) {
+          Get.offAllNamed(AppRoutes.auth);
         },
         (userData) {
           user.value = userData;
-          Get.offAllNamed(AppRoutes.home); // Navigate to home
+          Get.offAllNamed(AppRoutes.home);
         },
       );
     } catch (e) {
@@ -89,14 +76,29 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Show loading dialog
+  Future updateUser(UserModel userData) async {
+    try {
+      _showLoadingDialog();
+      error.value = "";
+      isLoading.value = true;
+      userData.id = user.value?.id;
+      final result = await _authRepository.updateUser(userData);
+      user.value = userData;
+      _dismissLoadingDialog();
+    } catch (e) {
+      // error.value = "Failed to update user.";
+      error.value = "An unexpected error occurred: $e";
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void _showLoadingDialog() {
     if (Get.isDialogOpen != true) {
       loadingDialog();
     }
   }
 
-  /// Dismiss loading dialog
   void _dismissLoadingDialog() {
     if (Get.isDialogOpen == true) {
       Get.back();
@@ -106,6 +108,6 @@ class AuthController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    checkAuthentication(); // Check authentication when controller is ready
+    checkAuthentication();
   }
 }

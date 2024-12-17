@@ -40,6 +40,7 @@ class AuthService implements IAuthApiService {
   // update
   @override
   Future<dynamic> updateUser(dynamic userData) async {
+    await Future.delayed(const Duration(seconds: 2));
     // logic
     return UserModel(
       id: "65844",
@@ -51,6 +52,7 @@ class AuthService implements IAuthApiService {
   // delete
   @override
   Future<dynamic> deleteUser() async {
+    await Future.delayed(const Duration(seconds: 2));
     // logic
     return UserModel(
       id: "65844",

@@ -33,7 +33,7 @@ class CustomAppBar extends GetView<AuthController> {
                 icon: Obx(
                   () => CircleAvatar(
                     child: Text(
-                      "${controller.user.value?.name[0].toUpperCase()}",
+                      "${controller.user.value?.name?[0].toUpperCase()}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
